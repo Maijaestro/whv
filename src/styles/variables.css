@@ -1,0 +1,19 @@
+:root{
+  --color-primary: #A6EFEF;
+  --color-signal: #F0A5DC;
+  --color-warn: #F0E4A5;
+  --color-muted: #789B9B;
+  --color-dark: #706944;
+  --color-accent: #704465;
+
+  /* Segoe UI is not universally available; recommend 'Inter' or system stack */
+  --font-base: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body, html, #app{height:100%;margin:0;font-family:var(--font-base);background:#0b0b0b;color:#fff}
+.app-header{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,0.4)}
+.tabs a{margin-right:12px;color:var(--color-primary);text-decoration:none}
+.right-controls button{margin-left:8px}
+.app-main{padding:12px}
+
+.group{border:1px solid rgba(255,255,255,0.04);padding:12px;margin:8px 0}
