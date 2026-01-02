@@ -1,29 +1,38 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Vite: dev",
-      "type": "pwa-node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "name": "Server: dev",
-      "type": "pwa-node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev:server"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}"
-    }
-  ],
-  "compounds": [
-    {
-      "name": "Run Frontend + Server",
-      "configurations": ["Server: dev", "Vite: dev"]
-    }
-  ]
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Vite: dev",
+			"type": "pwa-node",
+			"request": "launch",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": [
+				"run",
+				"dev"
+			],
+			"console": "integratedTerminal",
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"name": "Server: dev",
+			"type": "pwa-node",
+			"request": "launch",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": [
+				"run",
+				"dev:server"
+			],
+			"console": "integratedTerminal",
+			"cwd": "${workspaceFolder}"
+		}
+	],
+	"compounds": [
+		{
+			"name": "Run Frontend + Server",
+			"configurations": [
+				"Server: dev",
+				"Vite: dev"
+			]
+		}
+	]
 }
