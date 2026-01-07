@@ -4,7 +4,7 @@ module.exports = {
 	parser: '@typescript-eslint/parser',
 	parserOptions: {ecmaVersion: 2021, sourceType: 'module', extraFileExtensions: ['.vue']},
 	plugins: ['vue', '@typescript-eslint', 'import'],
-	extends: ['eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended'],
+	extends: ['eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:prettier/recommended', 'plugin:@typescript-eslint/recommended'],
 	settings: {'import/resolver': {typescript: {}}},
 	rules: {},
 	overrides: [

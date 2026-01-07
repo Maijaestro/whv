@@ -1,8 +1,7 @@
 import { createApp } from './main'
 
-const { app, router, pinia } = createApp()
+const { app, router } = createApp()
 
 router.isReady().then(() => {
-  app.use(pinia)
   app.mount('#app')
 })

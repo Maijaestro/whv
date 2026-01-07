@@ -16,26 +16,36 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import { ref } from 'vue'
 import iobrokerService from '../services/iobrokerService'
 
 // Local-only settings (no persistence)
-const iobroker = ref(iobrokerService.base)
+const iobroker = ref(iobrokerService.wsUrl)
 
 function testApi() {
-	// simple reachability test (HEAD)
-	fetch(iobroker.value, {method: 'GET'})
-		.then(() => alert('API erreichbar: ' + iobroker.value))
-		.catch(() => alert('API nicht erreichbar: ' + iobroker.value))
+  // Test WebSocket connection to the configured URL
+  const testUrl = iobroker.value.startsWith('ws') ? iobroker.value : 'ws://' + iobroker.value
+  try {
+    const testWs = new WebSocket(testUrl)
+    testWs.onopen = () => {
+      alert('WebSocket erreichbar: ' + testUrl)
+      testWs.close()
+    }
+    testWs.onerror = () => {
+      alert('WebSocket nicht erreichbar: ' + testUrl)
+    }
+  } catch (e) {
+    alert('Fehler beim WebSocket-Test: ' + e)
+  }
 }
 
 function save() {
-	iobrokerService.setBase(iobroker.value)
-	alert('Adresse übernommen (in-memory)')
+  const newUrl = iobroker.value.startsWith('ws') ? iobroker.value : 'ws://' + iobroker.value
+  iobrokerService.setWsUrl(newUrl)
+  alert('WebSocket-Adresse übernommen (in-memory)')
 }
 
 function cancel() {
-	iobroker.value = iobrokerService.base
+  iobroker.value = iobrokerService.wsUrl
 }
-
 </script>

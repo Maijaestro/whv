@@ -1,3 +1,8 @@
+$color-primary: var(--color-primary);
+$color-signal: var(--color-signal);
+$color-front: var(--color-front);
+$color-background: var(--color-background);
+
 :root {
 	--color-primary: #A6EFEF;
 	--color-signal: #F0A5DC;
@@ -5,6 +10,8 @@
 	--color-muted: #789B9B;
 	--color-dark: #706944;
 	--color-accent: #704465;
+	--color-background: #0b0b0b;
+	--color-front: #ffffff;
 
 	/* Segoe UI is not universally available; recommend 'Inter' or system stack */
 	--font-base: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -16,26 +23,8 @@ html,
 	height: 100%;
 	margin: 0;
 	font-family: var(--font-base);
-	background: #0b0b0b;
-	color: #fff
-}
-
-.app-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 8px 12px;
-	background: rgba(0, 0, 0, 0.4)
-}
-
-.tabs a {
-	margin-right: 12px;
-	color: var(--color-primary);
-	text-decoration: none
-}
-
-.right-controls button {
-	margin-left: 8px
+	background: $color-background;
+	color: $color-front
 }
 
 .app-main {
@@ -46,4 +35,19 @@ html,
 	border: 1px solid rgba(255, 255, 255, 0.04);
 	padding: 12px;
 	margin: 8px 0
+}
+
+.lamp-control {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px;
+	border: 1px solid rgba(166, 239, 239, 0.2);
+	border-radius: 4px;
+	margin: 8px 0
+}
+
+.lamp-control .label {
+	flex: 1;
+	font-weight: 500
 }
