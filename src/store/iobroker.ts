@@ -1,67 +1,78 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
-import { IoBrokerWsClient } from "../services/iobrokerClient";
+import { reactive, ref } from "vue";
+import { createIoBrokerClient } from "../services/iobrokerClient";
 
 export const useIoBrokerStore = defineStore("iobroker", () => {
-  const states = reactive<Record<string, any>>({});
-  const subscriptions = new Set<string>();
+  const states = reactive<Record<string, ioBroker.State | null>>({});
+  const subscriptions = new Map<
+    string,
+    (id: string, state: ioBroker.State | null | undefined) => void
+  >();
 
-  const client = new IoBrokerWsClient(
-    {
-      url: "ws://iobroker:8084",
-      name: "whv-client",
-      debug: true,
+  const isReady = ref(false);
+
+  const connection = createIoBrokerClient({
+    host: "iobroker",
+    port: 8084,
+    name: "whv-frontend",
+
+    onReady: () => {
+      console.log("[iobroker] ready");
+      isReady.value = true;
+
+      // Jetzt ALLE wartenden Subscriptions ausführen
+      for (const [id, handler] of subscriptions) {
+        connection.subscribeState(id, handler as any);
+
+        connection.getState(id).then((state) => {
+          states[id] = state ?? null;
+        });
+      }
     },
-    handleMessage,
-    handleConnected,
-    handleDisconnected
-  );
+  });
 
-  client.connect();
+  function ensureSubscribed(id: string) {
+    if (subscriptions.has(id)) return;
 
-  function handleConnected() {
-    console.log("[store] connected (ready)");
+    const handler = (
+      stateId: string,
+      state: ioBroker.State | null | undefined
+    ) => {
+      states[stateId] = state ?? null;
+    };
 
-    // Subscriptions nur EINMAL senden
-    for (const id of subscriptions) {
-      client.subscribe(id);
+    subscriptions.set(id, handler);
+
+    if (isReady.value) {
+      // Verbindung steht → sofort subscriben
+      connection.subscribeState(id, handler as any);
+
+      connection.getState(id).then((state) => {
+        states[id] = state ?? null;
+      });
     }
-  }
 
-  function handleDisconnected() {
-    console.log("[store] disconnected");
-  }
-
-  function handleMessage(msg: any[]) {
-    const [_, __, command, args] = msg;
-
-    if (command === "stateChange") {
-      const [id, state] = args;
-      states[id] = state;
-    }
-  }
-
-  function subscribe(id: string) {
-    if (!subscriptions.has(id)) {
-      subscriptions.add(id);
-      client.subscribe(id);
-    }
+    // Wenn nicht ready → warten, bis onReady kommt
   }
 
   function unsubscribe(id: string) {
-    if (subscriptions.has(id)) {
-      subscriptions.delete(id);
-      client.unsubscribe(id);
+    const handler = subscriptions.get(id);
+    if (!handler) return;
+
+    if (isReady.value) {
+      connection.unsubscribeState(id, handler as any);
     }
+
+    subscriptions.delete(id);
   }
 
   function setState(id: string, val: any) {
-    client.setState(id, val);
+    connection.setState(id, val);
   }
 
   return {
     states,
-    subscribe,
+    ensureSubscribed,
     unsubscribe,
     setState,
   };
