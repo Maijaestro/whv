@@ -1,5 +1,5 @@
 import { computed, onMounted, onUnmounted } from "vue";
-import { useIoBrokerStore } from "../store/iobroker";
+import { useIoBrokerStore } from "../stores/useIoBrokerStore";
 
 export interface DataPoint {
   id: string;
@@ -10,11 +10,11 @@ export function useDataPoint(dp: DataPoint) {
   const store = useIoBrokerStore();
 
   onMounted(() => {
-    store.ensureSubscribed(dp.id);
+    store.subscribeState(dp.id);
   });
 
   onUnmounted(() => {
-    store.unsubscribe(dp.id);
+    store.unsubscribeState(dp.id);
   });
 
   const value = computed(() => store.states[dp.id]?.val);

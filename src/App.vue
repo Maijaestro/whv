@@ -9,6 +9,7 @@
         <router-link to="/links">Links</router-link>
       </nav>
       <div class="right-controls">
+        <IoBrokerStatusIndicator class="navbar-btn" />
         <router-link
           to="/notifications"
           class="navbar-btn"
@@ -28,12 +29,14 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import IoBrokerStatusIndicator from "./components/IoBrokerStatusIndicator.vue";
+</script>
 
 <style lang="scss">
 .app-header {
   display: grid;
-  grid-template-columns: auto 72px;
+  grid-template-columns: auto 150px;
   align-items: center;
   padding: 8px 12px;
   background: $color-background;
@@ -55,9 +58,8 @@
   align-items: center;
 
   .navbar-btn {
-    margin-right: 10px;
-    margin-top: 4px;
     padding: 6px;
+    margin: 6px;
 
     :hover {
       fill: $color-primary;

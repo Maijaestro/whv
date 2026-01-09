@@ -11,7 +11,9 @@
 		"types": [
 			"vite/client",
 			"iobroker"
-		]
+		],
+		"baseUrl": ".", 
+		"paths": { "@/*": ["src/*"] }
 	},
 	"include": [
 		"src/**/*",
